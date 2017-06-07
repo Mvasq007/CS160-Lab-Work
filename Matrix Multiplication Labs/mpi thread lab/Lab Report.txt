@@ -1,0 +1,47 @@
+860924181
+Login: mvasq007
+Name: Miguel Vasquez
+Section: 001
+TA: Li Tan
+Email: mvasq007@ucr.edu
+Lab 8
+
+Lab Report:
+
+Ex1:
+How to run:
+	Given hello_world.c and GNU platform:
+	run command: "mpiCC mpi_pi.c -o pi"
+	run command: mpirun -mca btl ^openib -n 2 pi
+
+Sample Output:
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 416.6780 milliseconds.
+4 threads used.
+126.614442
+127.783604
+125.091217
+128.153573
+
+Sequential Output:
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 1568.1930 milliseconds.
+126.614442
+127.783604
+125.091217
+128.153573
+
+
+Findings:
+	Using methods from the previous labs I was able to parallelize this program
+with little logic difficulty. The challenge came in using the syntax
+when using the send and recieve MPI functions. While confusing once I determined
+the proper amount of data to transmit it worked perfectly. My problem
+was that I was treating the Matrix as a one dimensional array where in
+actuality it was a 2 dimensional. 
+
+	Furthermore I made several attempts to use MPI's reduce and barrier functions
+although I struggled to comprehend them significally. In addition I tried
+to dynamically allocate block size if in the event the processes do not 
+divide evenly. While I came close all my algorithm needed was some refining.
+
+Total Speedup = 3.760 (this value is skewed due to a remote connection 
+using school computers resulting in roughly a 1.5 times speedup)

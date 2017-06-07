@@ -1,0 +1,59 @@
+860924181
+Login: mvasq007
+Name: Miguel Vasquez
+Section: 001
+TA: Li Tan
+Email: mvasq007@ucr.edu
+Lab 2
+
+Lab Report:
+
+Ex1:
+How to run:
+	Given hello_pthread.c and GNU platform:
+	run command: "g++ -Wall hello_pthread.c -o HP -pthread"
+	run command: ./HP
+
+Sample Output:
+In main: creating thread 0
+In main: creating thread 1
+In main: creating thread 2
+In main: creating thread 3
+Hello world! 0 
+Hello world! 1 
+Hello world! 2 
+Hello world! 3 
+In main: creating thread 4
+Hello world! 4 
+
+
+How to run:
+	Given pi_loop_omp.cpp and GNU platform:
+	run command: "g++ -Wall pthread_loop.c -o PTL -pthread"
+	run command: ./PTL
+
+Sample Output:
+pi is 3.141593 in 22.1690 milliseconds, with 1000000 steps and 2 thread(s).
+pi is 3.141593 in 21.0800 milliseconds, with 1000000 steps and 2 thread(s).
+pi is 3.141593 in 21.0950 milliseconds, with 1000000 steps and 2 thread(s).
+pi is 3.141593 in 21.1890 milliseconds, with 1000000 steps and 2 thread(s).
+
+Findings:
+	Once understand how schedule clauses operated and how to properly place
+them  into nested loops the correct values were attained. While each clause
+on its own generated similar times, once a nested clause was introduced several
+failures began to occur. One of the most difficult failures to deal with was
+extremely long loops when using the schedule clause, this was likely the result
+of the threads being unbalanced and thus the schedule having to wait on on thread.
+Because of this the nowait arguement is used in the schedule structure. This 
+allowed me to increase the time by a substantial amount. After this increase it time
+I focused my efforts into determining how each clause affected the others in the nested loops. 
+
+Using Double Static generated the fasted time due to the small overall N value. 
+Any combination of the dynamic clauses however would often result in incorrect values or seg faults.
+After this using combinations would often result in worse results such as runtime and dynamic, or
+double dynamic. These would result in segfaults or wrong values, although in some
+cases would be significantly faster than the static counterpart. These can be the cause of 
+either the introduction of the nowait clause thus dynamic threads that have been moving ahead
+are now just giving the wrong value, upon removing the nowait to reintroduce the barriers
+I was once again met with the issue of loops that went on for way too long. 

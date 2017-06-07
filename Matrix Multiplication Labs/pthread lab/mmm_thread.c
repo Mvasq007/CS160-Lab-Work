@@ -1,0 +1,113 @@
+/* mmm.c
+ *
+ *     Use a straightforward triple loop to perform a matrix-matrix multiplication.
+ *
+ *     Input:
+ *         A[]: Matrix A to be multiplied.
+ *         B[]: Matrix B to be multiplied.
+ *         N:   Size of matrices A, B, and C. Suppose all matrices are square matrices for simplicity.
+ *
+ *     Output:
+ *         C[]: Matrix C as a result of the multiplication.
+ *         The time spent on doing the multiplication.
+ *
+ *     Usage:
+ *         1. Compile: gcc -Wall mmm.c -o mmm
+ *         2. Run:     ./mmm
+ *
+ *     Note:
+ *         1. The matrices are stored in one-dimension arrays instead of two-dimension ones.
+ *         2. The initial value of elements in the matrices are randomly generated before multiplication.
+ *         3. As the memory is allocated for matrices on the stack and the default stack size may be not enough to keep all three matrices, if you would like to change the pre-defined matrix size N into a greater value. In this case, you have to increase the stack size for holding larger matrices. Please execute "ulimit -s unlimited" under the command line ("ulimit -s hard" on Mac OS).
+ *
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <pthread.h>
+
+#define N 500
+#define NUM_THREADS 4
+double A[N*N], B[N*N], C[N*N];
+
+/*
+ * Define time variables and functions.
+ */
+
+static struct timeval start_time;
+
+static void start_timer()
+{
+	gettimeofday(&start_time, NULL);
+}
+
+static double end_timer()
+{
+	struct timeval end_time;
+	gettimeofday(&end_time, NULL);
+	return (end_time.tv_sec-start_time.tv_sec)*1000 + (end_time.tv_usec-start_time.tv_usec)/1000.0;
+}
+
+void *mmm(void* thread_ID)
+{
+	int i, j, k;
+	long ID = (long)thread_ID;
+	int chunk = N/NUM_THREADS;	
+	for(i = (ID*chunk); i < chunk*(ID+1); i++)
+		for(j = 0; j < N; j++)
+			for (k = 0; k < N; k++)			
+				C[i*N+j] += A[i*N+k] * B[k*N+j];
+
+}
+
+int main(int argc, char* argv[])
+{
+int i, j, k;
+int IsVerified = 1;
+
+	/* Initialize matrices by random numbers. */
+	srand(86456);
+	double maxr = (double)RAND_MAX;
+	for(i = 0; i < N; i++)
+		for(j = 0; j < N; j++)
+		{
+			if(!IsVerified)
+			{
+				/* Use simple numbers to verify the correctness of results. */
+				A[i*N+j] = 1.0;
+				B[i*N+j] = 1.0;
+				C[i*N+j] = 0.0;
+			}
+			else
+			{
+				/* Actual scientific computation. */
+				A[i*N+j] = rand()/maxr;
+				B[i*N+j] = rand()/maxr;
+				C[i*N+j] = rand()/maxr;
+			}
+		}
+	void *status;
+	int rc;
+	int t =0;
+	/* Do the multiplication and calculate the computation time. */
+	start_timer();
+	pthread_t * thread = (pthread_t *)malloc(sizeof(pthread_t)*NUM_THREADS);
+	for(t =0; t<NUM_THREADS; t++)
+	{
+		rc = pthread_create(&thread[t], NULL, mmm, (void *)t);
+
+	}
+	for (int t = 0; t < NUM_THREADS; t++)
+	{
+		pthread_join(thread[t], &status);
+   }
+	printf("Time for C(%d, %d) = C(%d, %d) + A(%d, %d) * B(%d, %d) is %.4lf milliseconds with %d threads \n", N, N, N, N, N, N, N, N, end_timer(), NUM_THREADS);
+
+	/* Print out partial final results. */
+	for(i = N-2; i < N; i++)
+		for(j = N-2; j < N; j++)
+			printf("%f\n", C[i*N+j]);
+
+	return 0;
+}

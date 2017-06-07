@@ -1,0 +1,38 @@
+860924181
+Login: mvasq007
+Name: Miguel Vasquez
+Section: 001
+TA: Li Tan
+Email: mvasq007@ucr.edu
+Lab 6
+
+Lab Report:
+
+Ex2:
+How to run:
+	Given mmm_thread.c and GNU platform:
+	run command: "g++ -Wall mmm_thread.c -o mmm_pt -pthread"
+	run command: ./mmm_pt
+
+Sample Output:
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 468.0470 milliseconds with 4 threads 
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 471.1370 milliseconds with 4 threads 
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 485.9410 milliseconds with 4 threads 
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 531.6240 milliseconds with 4 threads 
+
+Sequential Output:
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 909.9290 milliseconds.
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 902.5920 milliseconds.
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 906.0050 milliseconds.
+Time for C(500, 500) = C(500, 500) + A(500, 500) * B(500, 500) is 907.0600 milliseconds.
+
+
+Findings:
+	Using minimal parallelization speedup was achieved and the correct matrix population
+	was achieved. There was no need for any major structures other than dividing the workloads
+	for the threads by chunks. However it should be noted that only the main loop needed
+	to be parrelized or else the user runs the risk of not populating the matrix with the correct values. 
+	The Speedup attained was roughly 2.025... times faster. The reason that other structures such
+	as mutex's are not used is because they really dont add anything. Mutex's slow it down since
+	none of the values aside from the C matrix are shared. The C matrix is also just a sum of
+	the A and B matrices which were done beforehand. 

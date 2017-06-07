@@ -1,0 +1,40 @@
+860924181
+Login: mvasq007
+Name: Miguel Vasquez
+Section: 001
+TA: Li Tan
+Email: mvasq007@ucr.edu
+Lab 2
+
+Lab Report:
+
+Ex2:
+How to run:
+	Given hello_pthread.c and GNU platform:
+	run command: "g++ -Wall thread_pc.c -o TPC -pthread"
+	run command: ./TPC
+
+Sample Output:
+With 2 thread and 58.7640 milliseconds, the sum is 555094.2554.
+With 2 thread and 58.7640 milliseconds, the sum is 555094.2554.
+With 2 thread and 61.2660 milliseconds, the sum is 555094.2554.
+With 2 thread and 58.0920 milliseconds, the sum is 555094.2554.
+
+Findings:
+	After trial and error correct output was achieved, learning how
+	barriers worked versus mutex's and conditions proved to be the greatest
+	challenge. Having barriers and then joining the threads would result
+	in infinite loops. Speedup was not achieved and ran about 50%  slower. 
+	Using mutex's resulted in some slow down and resulted in proper output.
+	Using barriers worked about 50% of the time, but game some speedup, 
+	often I would get incorrect values. This could be the result of the 
+	rand() function not being thread safe.
+	
+	The functionality of my threads is very simple. The program starts
+	and the threads are created. Its first initialization breaks up the work
+	evenly amongst the threads so that the warehouse is populated in parallel.
+	The threads are then joined together to prevent incorrect output. After this
+	the threads are broken up again to repeat the process in the consumers function.
+	Making sure to wait after the calls to prevent having 4 different outputs. 
+	It is this distribution of work that allowed me to achieve the correct values. 
+	
